@@ -2,12 +2,9 @@
 
 namespace InterfaceComp
 {
-	int Group::addComp(BaseInerface* compPtr) 
+	CompConteiner& Group::getComponents() 
 	{
-
-		compCont.push_back(compPtr);
-		draw.add()
-
+		return compCont;
 	}
 
 	void __fastcall Group::setPosition(int x, int y) 
@@ -23,12 +20,6 @@ namespace InterfaceComp
 	void Group::renderChild(const RenderWindowPtr& window) 
 	{
 		if (isVisible())
-			draw.render(window);
-	}
-
-	BaseInerface* Group::At(int index)
-	{
-		if (index >= 0)
-			return compCont[index];
+			compCont.render(window);
 	}
 }
