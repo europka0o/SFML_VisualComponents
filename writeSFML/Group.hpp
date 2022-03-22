@@ -1,5 +1,6 @@
 #pragma once
 #include "InterfBase.hpp"
+#include <cassert>
 
 namespace InterfaceComp 
 {
@@ -7,7 +8,7 @@ namespace InterfaceComp
 	{
 		public:
 			CompConteiner() = default;
-			CompConteiner(const std::initializer_list<BaseInerface*>& components) : compCont(components)
+			CompConteiner(const std::initializer_list<BaseInerface*>& components, BaseInerface* ownerComp) : compCont(components), owner(ownerComp)
 			{
 				for (auto& comp : components)
 					draw.add(comp);
@@ -17,26 +18,31 @@ namespace InterfaceComp
 
 			void add(BaseInerface* comp) 
 			{
+				assert(owner);
+
 				draw.add(comp);
 				compCont.push_back(comp);
 
-				/*auto& axis = 
-
-					for ()
-					{
-					}*/
+				if (compCont.size() == 1)
+				{
+					comp->setPosition(owner->getPosition());
+				}
+				else
+				{
+					auto& axes = compCont.back()->getPosition();
+					comp->setPosition(axes.x, axes.y + compCont.back()->getSize().height);
+				}
 			}
 
 			void add(const std::initializer_list<BaseInerface*>& components)
 			{
 				for (const auto& comp : components)
 				{
-					draw.add(comp);
-					compCont.push_back(comp);
+					add(comp);
 				}
 			}
 
-			BaseInerface* At(int index)
+			BaseInerface* at(int index)
 			{
 				if (index >= 0)
 					return compCont[index];
@@ -48,15 +54,27 @@ namespace InterfaceComp
 					return compCont[index];
 			}
 
+			std::vector<BaseInerface*>& vector()
+			{
+				return compCont;
+			}
+
+			size_t size()
+			{
+				return compCont.size();
+			}
+
 		private:
 			void render(const RenderWindowPtr& window)
 			{
 				draw.render(window);
 			}
 
-			std::vector<BaseInerface*> compCont;
 			//Контейнер с комонентами интерфейса
+			std::vector<BaseInerface*> compCont;
 			DrawManager draw;
+			/// Владелец контейнера
+			BaseInerface* owner;
 
 			friend class Group;
 	};
@@ -65,7 +83,7 @@ namespace InterfaceComp
 	{
 		public:
 			Group() = default;
-			Group(const std::initializer_list<BaseInerface*>& components) : compCont(components) 
+			Group(const std::initializer_list<BaseInerface*>& components) : compCont(components, this) 
 			{
 			}
 

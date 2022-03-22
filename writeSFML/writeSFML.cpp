@@ -1,6 +1,8 @@
-﻿#pragma once
+﻿ #pragma once
 #include "TextBox.hpp"
+#include "Group.hpp"
 #include "Typedef.hpp"
+#include "Scene.hpp"
 #include <cassert>
 #include <thread>
 #include <SFML/Audio.hpp>
@@ -8,41 +10,39 @@
 
 using namespace sf;
 
-void main_rend(Event& ev, const RenderWindowPtr& window);
+void main_rend(Event& ev);
 
 int main()
 {
 	sf::Event event;
-	auto window = std::make_shared<sf::RenderWindow>(VideoMode(1920, 1080), "TextBox", Style::Default);
-
-	main_rend(event, window);
+	main_rend(event);
 
     return 0;
 }
 
 
-void main_rend(Event& ev, const RenderWindowPtr& window) {
-
-	Vector2i mouse_pos = Mouse::getPosition(*window);
-	mouse_pos = Vector2i(window->mapPixelToCoords(mouse_pos));
-
+void main_rend(Event& ev) 
+{
 	sf::Font font;
 	font.loadFromFile("fonts/19809.otf");
 	auto label = std::make_shared<InterfaceComp::TextBox>(font, 100, 100, L"String");
-	label->resize(40);
-	DrawManager draw;
+	auto label2 = std::make_shared<InterfaceComp::TextBox>(font, 100, 100, L"String2");
+	auto label3 = std::make_shared<InterfaceComp::TextBox>(font, 100, 100, L"String3");
 
-	draw.add(label.get());
+	auto group = std::make_shared<InterfaceComp::Group>(std::initializer_list<InterfaceComp::BaseInerface*>{label.get(), label2.get(), label3.get()});
 
-	while (window->isOpen()) {
+	group->setPosition(100, 100);
 
-		while (window->pollEvent(ev)) {
+	auto scene = std::make_shared<Rep::Scene>();
+
+	scene->editRep().insert(group.get());
+
+	while (scene->getWindow()->isOpen()) {
+
+		while (scene->getWindow()->pollEvent(ev)) {
 			if (ev.type == Event::Closed) {
-				window->close();
+				scene->getWindow()->close();
 			}
-
-			mouse_pos = Mouse::getPosition(*window);
-			mouse_pos = Vector2i(window->mapPixelToCoords(mouse_pos));
 
 			if (ev.type == ev.MouseButtonPressed && ev.mouseButton.button == Mouse::Left)
 			{
@@ -50,8 +50,7 @@ void main_rend(Event& ev, const RenderWindowPtr& window) {
 			}
 		}
 
-		window->clear();
-		draw.render(window);
-		window->display();
+		scene->update();
+		scene->build();
 	}
 }

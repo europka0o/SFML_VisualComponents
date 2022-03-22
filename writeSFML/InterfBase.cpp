@@ -7,19 +7,22 @@ namespace InterfaceComp
 
 	BaseInerface::BaseInerface() :
 		pos(axes_i(0, 0)),
-		fl_rect(Vector2f(0, 0), Vector2f(0, 0))
+		fl_rect(Vector2f(0, 0), Vector2f(0, 0)),
+		active(false)
 	{
 	}
 
 	BaseInerface::BaseInerface(int x, int y, const FloatRect& rect) :
 		pos(axes_i(x, y)),
-		fl_rect(rect)
+		fl_rect(rect),
+		active(false)
 	{
 	}
 
 	BaseInerface::BaseInerface(const axes_i& xy, const FloatRect& rect) :
 		pos(xy),
-		fl_rect(rect)
+		fl_rect(rect),
+		active(false)
 	{
 	}
 

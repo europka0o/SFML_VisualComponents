@@ -1,8 +1,16 @@
 #pragma once
 #include "Base.hpp"
 #include "Render.hpp"
+#include <functional>
 
-namespace InterfaceComp {
+namespace Rep 
+{
+	class Scene;
+}
+
+namespace InterfaceComp
+{
+	using namespace Base;
 
 	class BaseInerface : public IRender {
 		protected:
@@ -18,6 +26,20 @@ namespace InterfaceComp {
 			virtual void __fastcall setPosition(int x, int y);
 			virtual const FloatRect& getSize() const;
 			virtual void setSize(const sf::FloatRect& rect);
+			bool isActive() { return active; }
+
+			/// Обработчик события активации элемента 
+			std::function<void(BaseInerface*)> onActived;
+			/// Обработчик события щелчка мышью по элементу 
+			std::function<void(BaseInerface*)> onClick;
+			/// Обработчик события нажатия клавиши
+			std::function<void(BaseInerface*)> onKeyPressed;
+
+		private:
+			bool active;
+			void setActive(bool isActive) { active = isActive; };
+
+			friend class Rep::Scene;
 	};
 
 	//Направление градиента
