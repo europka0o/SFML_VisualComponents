@@ -1,6 +1,6 @@
 #include "Render.hpp"	
 
-bool IRender::isVisible() const 
+bool IRender::IsVisible() const 
 {
 	return visible;
 }
@@ -10,14 +10,14 @@ void IRender::SetVisible(bool vis)
 	visible = vis;
 }
 
-void DrawManager::add(IRender* rend)
+void DrawManager::Add(IRender* rend)
 {
-	drawCont.push_back(rend);	
+	drawCont.insert(rend);	
 }
 
-void DrawManager::render(const RenderWindowPtr& window)
+void DrawManager::Render(const RenderWindowPtr& window)
 {
 	for (auto& child : drawCont)
-		if(child->isVisible())
-			child->renderChild(window);
+		if(child->IsVisible())
+			child->_render(window);
 }

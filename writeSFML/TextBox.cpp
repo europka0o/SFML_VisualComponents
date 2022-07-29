@@ -64,7 +64,7 @@ void InterfaceComp::TextBox::resize(int size) {
 	fl_rect = bevel->getGlobalBounds();
 }
 
-void InterfaceComp::TextBox::renderChild(const RenderWindowPtr& window) {
+void InterfaceComp::TextBox::_render(const RenderWindowPtr& window) {
 	if (visible) {
 		if (visible_bevel) {
 			window->draw(*bevel);

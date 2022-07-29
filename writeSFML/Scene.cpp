@@ -1,19 +1,28 @@
 #include "Scene.hpp"
+#include <SFML/OpenGL.hpp>
+//#include <GL/gl.h>
 
 namespace Rep
 {
 	Scene::Scene()
 	{
 		window = std::make_shared<sf::RenderWindow>(VideoMode(1920, 1080), "Scene", Style::Default);
+		//glMatrixMode(GL_PROJECTION);
 	}
 
 	void Scene::build()
 	{
 		window->clear();
 
+		/*glBegin(GL_QUADS);
+		glVertex3f(100, 100, 0);
+		glVertex3f(100, 50, 0);
+		glVertex3f(100, 50, 30);
+		glEnd();*/
+
 		for (const auto& r : rep)
 		{
-			r->renderChild(window);
+			r->_render(window);
 		}
 
 		window->display();
@@ -26,7 +35,7 @@ namespace Rep
 
 		for (const auto& r : rep)
 		{
-			if (r->isVisible())
+			if (r->IsVisible())
 			{
 				if (r->getSize().contains(mousePos.x, mousePos.y))
 				{

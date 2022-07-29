@@ -16,7 +16,8 @@ namespace InterfaceComp {
 			void __fastcall setPosition(int x, int y) override; //Устанавливает позицию объекта по осям X, Y
 			void setPosition(const axes_i& xy) override; //Устанавливает позицию объекта по осям X, Y 
 			void resize(int size = InterfaceComp::text_size::normal); //Задает размер объекта в пикселях
-			void renderChild(const RenderWindowPtr& window) override;
+		protected:
+			void _render(const RenderWindowPtr& window) override;
 	};
 
 }

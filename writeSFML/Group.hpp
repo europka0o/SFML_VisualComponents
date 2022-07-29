@@ -11,7 +11,7 @@ namespace InterfaceComp
 			CompConteiner(const std::initializer_list<BaseInerface*>& components, BaseInerface* ownerComp) : compCont(components), owner(ownerComp)
 			{
 				for (auto& comp : components)
-					draw.add(comp);
+					draw.Add(comp);
 			}
 
 			~CompConteiner() = default;
@@ -20,12 +20,16 @@ namespace InterfaceComp
 			{
 				assert(owner);
 
-				draw.add(comp);
+				draw.Add(comp);
 				compCont.push_back(comp);
 
 				if (compCont.size() == 1)
 				{
 					comp->setPosition(owner->getPosition());
+					auto& axes = comp->getPosition();
+
+					//owner->setSize(comp->getSize().height);
+					//fl_rect.width = comp->getSize().width;
 				}
 				else
 				{
@@ -67,7 +71,7 @@ namespace InterfaceComp
 		private:
 			void render(const RenderWindowPtr& window)
 			{
-				draw.render(window);
+				draw.Render(window);
 			}
 
 			//Контейнер с комонентами интерфейса
@@ -92,13 +96,15 @@ namespace InterfaceComp
 			void __fastcall setPosition(int x, int y) override; //Устанавливает позицию объекта по осям X, Y
 			void setPosition(const axes_i& xy) override; //Устанавливает позицию объекта по осям X, Y 
 			CompConteiner& getComponents();
-			void renderChild(const RenderWindowPtr& window) override;
 
 			BaseInerface* operator[] (size_t index)
 			{
 				if (index >= 0)
 					return compCont[index];
 			}
+
+		protected:
+			void _render(const RenderWindowPtr& window) override;
 
 		private:
 			CompConteiner compCont;
